@@ -5,6 +5,7 @@
 **Важно** 
 * Сообщение о прохождении тестов связано с **источником**.
 * Текущий код является последней успешной версией **источника**.
+* [Cсылка на **источник** в Git](https://github.com/IlushinGL/express-mesto-gha)
 
 ### Автор: Григорий Илюшин
 
@@ -25,5 +26,3 @@ npm install
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
-
-* [Cсылка на **источник** в Git](https://github.com/IlushinGL/express-mesto-gha)
