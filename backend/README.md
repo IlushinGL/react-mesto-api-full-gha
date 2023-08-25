@@ -1,7 +1,7 @@
 [![Origin Tests](https://github.com/IlushinGL/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/IlushinGL/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
 
 # ЯндексПрактикум 2023
-### Проект14: Mesto - регистрация и авторизация на бэкенде
+### Mesto. Бэкенд - сервер API
 ### Автор: Григорий Илюшин
 
 
