@@ -1,0 +1,11 @@
+.data {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+  position: relative;
+  flex-direction: column;
+  opacity: 1;
+  height: 100%;
+  width: 100vw;
+}
