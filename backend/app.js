@@ -20,6 +20,12 @@ mongoose.connect(MONGODB_URL);
 app.use(requestLogger); // подключаем логгер запросов
 app.use(accessCors); // подключаем CORS
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.use('/', routesIndex);
 app.use('/*', (req, res, next) => {
   next(new NotFoundError('app: неизвестный URL'));
