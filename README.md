@@ -10,6 +10,6 @@
 
 IP 158.160.111.48
 
-Frontend http://mesto.iknow.studio
+Frontend https://mesto.iknow.studio
 
-Backend http://mesto-api.iknow.studio
+Backend https://mesto-api.iknow.studio
