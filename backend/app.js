@@ -26,6 +26,10 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+// TODO: Подумать об использовании helmet и лимитера запросов
+// https://expressjs.com/ru/advanced/best-practice-security.html
+// https://www.npmjs.com/package/express-rate-limit
+
 app.use('/', routesIndex);
 app.use('/*', (req, res, next) => {
   next(new NotFoundError('app: неизвестный URL'));
