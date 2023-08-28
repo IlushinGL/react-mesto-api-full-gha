@@ -20,6 +20,7 @@ mongoose.connect(MONGODB_URL);
 app.use(requestLogger); // подключаем логгер запросов
 app.use(accessCors); // подключаем CORS
 
+// TODO: Удалить после успешного ревью
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
