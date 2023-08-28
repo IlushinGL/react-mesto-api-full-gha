@@ -59,6 +59,7 @@ function App() {
   function handleRegister({email, password}) {
     apiUserAuth.register({email, password})
     .then(() => {
+      setUserKnown(true);
       navigate('/sign-in', {replace: true});
     })
     .catch((err) => {
