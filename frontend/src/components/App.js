@@ -46,7 +46,7 @@ function App() {
         navigate('/main', {replace: true});
       })
       .catch((err) => {
-        console.log(`${err} <Не удалось собрать информацию>`);
+        console.log(`${err} <Не удалось получить доступ к информации>`);
       });
     }
 
