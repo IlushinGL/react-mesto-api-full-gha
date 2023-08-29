@@ -15,10 +15,15 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import InfoTooltip from './InfoTooltip';
-
+import avatarNulllPath from '../images/template.png';
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState({
+    _id: '-1',
+    name: 'имя',
+    about: 'занятие',
+    avatar: avatarNulllPath,
+  });
   const [cards, setCards] = React.useState([]);
   const [isEditProfilePopupOpen, setProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setPlacePopupOpen] = React.useState(false);
@@ -32,28 +37,48 @@ function App() {
 
   React.useEffect(() => {
 
-    if (!isUserKnown) {
-      getKnownToken();
-      return;
-    }
+    if (isUserKnown) {
 
-    Promise.all([apInterface.getUserInfo(), apInterface.getInitialCards()])
+      Promise.all([apInterface.getUserInfo(), apInterface.getInitialCards()])
       .then(([userInfo, initialCards]) => {
         setCurrentUser(userInfo);
         setCards(Array.from(initialCards.data));
-        navigate('/main', {replace: true});
+        navigate('/main');
       })
       .catch((err) => {
-        console.log(`${err} <Не удалось получить информацию>`);
+        console.log(`${err} <Не удалось собрать информацию>`);
       });
+    }
 
   }, [isUserKnown, navigate]);
+
+  React.useEffect(() =>  {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt) {
+      apiUserAuth.checkToken(jwt)
+      .then((res) => {
+        apInterface.setAuth(jwt);
+        setUserKnown(true);
+        setUserEmail(res.email);
+      })
+      .catch((err) => {
+        setUserKnown(false);
+        setUserEmail('');
+        console.log(`${err} <Тухлый токен.>`);
+      });
+    } else {
+      setUserKnown(false);
+      setUserEmail('');
+    }
+  }, []);
 
   function handleRegister({email, password}) {
     apiUserAuth.register({email, password})
     .then(() => {
-      navigate('/sign-in', {replace: true});
       setUserKnown(true);
+      setUserEmail(email);
+      navigate('/sign-in');
     })
     .catch((err) => {
       setUserKnown(false);
@@ -72,7 +97,8 @@ function App() {
       apInterface.setAuth(res.token);
       setUserKnown(true);
       setUserEmail(email);
-      navigate('/main', {replace: true});
+      navigate('/main');
+
     })
     .catch((err) => {
       setUserKnown(false);
@@ -80,28 +106,6 @@ function App() {
       console.log(`${err} <Неудачная попытка авторизации.>`);
       setInfoTooltipOpen(true);
     });
-  }
-
-  function getKnownToken() {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
-      apiUserAuth.checkToken(jwt)
-      .then((res) => {
-        apInterface.setAuth(jwt);
-        setUserKnown(true);
-        setUserEmail(res.email);
-
-      })
-      .catch((err) => {
-        setUserKnown(false);
-        setUserEmail('');
-        console.log(`${err} <Тухлый токен.>`);
-      });
-    } else {
-      setUserKnown(false);
-      setUserEmail('');
-    }
   }
 
   function handleSignout() {
