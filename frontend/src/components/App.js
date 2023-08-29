@@ -15,16 +15,10 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import ConfirmationPopup from './ConfirmationPopup';
 import InfoTooltip from './InfoTooltip';
-import avatarNulllPath from '../images/template.png';
 
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState({
-    _id: '-1',
-    name: 'имя',
-    about: 'занятие',
-    avatar: avatarNulllPath,
-  });
+  const [currentUser, setCurrentUser] = React.useState(null);
   const [cards, setCards] = React.useState([]);
   const [isEditProfilePopupOpen, setProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setPlacePopupOpen] = React.useState(false);
@@ -37,30 +31,29 @@ function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    getKnownToken();
 
-    if (userEmail) {
-      // Помещаем МЕНЯ в КОНТЕКСТ.
-      apInterface.getUserInfo()
-      .then((info) => {setCurrentUser(info)})
-      .catch((err) => {
-        console.log(`${err} <Не удалось получить информацию о пользователе.>`);});
-
-      // Задаём начальный массив карточек.
-      apInterface.getInitialCards()
-      .then((initialCards) => {setCards(Array.from(initialCards.data))})
-      .catch((err) => {
-        console.log(`${err} <Не удалось получить начальный массив карточек.>`);});
-
-      navigate('/main', {replace: true});
+    if (!isUserKnown) {
+      getKnownToken();
+      return;
     }
-  }, [userEmail, navigate]);
+
+    Promise.all([apInterface.getUserInfo(), apInterface.getInitialCards()])
+      .then(([userInfo, initialCards]) => {
+        setCurrentUser(userInfo);
+        setCards(Array.from(initialCards.data));
+        navigate('/main', {replace: true});
+      })
+      .catch((err) => {
+        console.log(`${err} <Не удалось получить информацию>`);
+      });
+
+  }, [isUserKnown, navigate]);
 
   function handleRegister({email, password}) {
     apiUserAuth.register({email, password})
     .then(() => {
-      setUserKnown(true);
       navigate('/sign-in', {replace: true});
+      setUserKnown(true);
     })
     .catch((err) => {
       setUserKnown(false);
